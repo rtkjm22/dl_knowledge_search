@@ -1,0 +1,4 @@
+embeddings/**
+venv/**
+models/**
+.gradio
