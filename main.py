@@ -1,11 +1,15 @@
+import os
+
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.embeddings import HuggingFaceEmbeddings
-from langchain.vectorstores import FAISS
-from langchain.llms import GPT4All
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.vectorstores import FAISS
+from langchain_community.llms import GPT4All
 from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 import gradio as gr
+
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
 # テキストファイル読み込み
 loader = DirectoryLoader("./documents", glob="**/*.txt", loader_cls=TextLoader)
@@ -56,4 +60,4 @@ qa = RetrievalQA.from_chain_type(
 def chat_fn(message):
     return qa.run(message)
 
-gr.Interface(fn=chat_fn, inputs="text", outputs="text", title="社内ナレッジチャットボット💼").launch()
+gr.Interface(fn=chat_fn, inputs="text", outputs="text", title="社内ナレッジチャットボット💼").launch(share=True)
